@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class SeleniumConfirmation:
     def __init__(self) -> None:
         self.options = ChromeOptions()
-        self.options.add_argument('--headless')
+        # self.options.add_argument('--headless')
         self.options.add_argument('--no-sandbox')
         self.options.add_argument("--disable-dev-shm-usage")
         self.options.add_argument('--disable-gpu')
@@ -66,7 +66,12 @@ class SeleniumConfirmation:
                     try:
                         self.driver.get(product)
                         self.driver.find_element("css selector", "button.js-lot-raise").click()
-                        time.sleep(3)
+                        try:
+                            WebDriverWait(self.driver, 10).until(
+                                ec.visibility_of_element_located((By.ID, "site-message"))
+                            )
+                        except Exception as exc:
+                            logger.error('Ошибка: Окно подтверждения поднятия товара не было!')
                     except Exception as exc:
                         logger.error(f'Ошибка: Не смог поднять товар {exc}')
 
