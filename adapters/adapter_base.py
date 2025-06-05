@@ -22,7 +22,6 @@ class SeleniumConfirmation:
         self.options.add_argument('--no-sandbox')
         self.options.add_argument("--disable-dev-shm-usage")
         self.options.add_argument('--disable-gpu')
-        self.options.add_argument('--lang=ru')
         self.options.add_argument("--window-size=1366,1080")
         profile_path = os.path.join(os.path.expanduser("~"), ".profile1")
         self.options.add_argument(f"--user-data-dir={profile_path}")
@@ -48,31 +47,25 @@ class SeleniumConfirmation:
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
                     logger.error(f'Ошибка: Не появился qr')
-                time.sleep(100)
+                time.sleep(1)
             except Exception as exc:
                 logger.error(f'Ошибка: Нет окна авторизации через вк')
 
             try:
-                WebDriverWait(self.driver, 5).until(
-                    ec.presence_of_element_located((By.CLASS_NAME, "user-link-photo"))).click()
+                self.driver.get("https://funpay.com/en/users/12012053/")
             except Exception as exc:
-                logger.error(f'Ошибка: Не смог войти в настройки лк')
+                logger.error(f'Ошибка: Не смог открыть профиль')
 
-            try:
-                self.driver.find_element(By.XPATH, "//*[contains(text(), \"Профиль\")]").click()
-            except Exception as exc:
-                logger.error(f'Ошибка: Не нашел кнопку входа в профиль')
             try:
                 links = self.driver.find_elements(By.CSS_SELECTOR, 'a.btn.btn-default.btn-plus')
                 all_products = []
                 for link in links:
                     href = link.get_attribute("href")
                     all_products.append(href)
-
                 for product in all_products:
                     try:
                         self.driver.get(product)
-                        self.driver.find_element(By.XPATH, "//*[contains(text(), \"Поднять предложения\")]").click()
+                        self.driver.find_element("css selector", "button.js-lot-raise").click()
                         time.sleep(3)
                     except Exception as exc:
                         logger.error(f'Ошибка: Не смог поднять товар {exc}')
