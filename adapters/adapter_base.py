@@ -38,13 +38,13 @@ class SeleniumConfirmation:
                     ec.presence_of_element_located((By.CSS_SELECTOR, "a.social-login-item-vk"))
                 ).click()
                 try:
-                    self.driver.save_screenshot(os.path.join(os.getcwd(), 'check.png'))
                     WebDriverWait(self.driver, 25).until(
                         ec.presence_of_element_located((By.XPATH,
                                              "//*[contains(text(), \"Отсканируйте QR-код сканером  в приложении ВКонтакте  или камерой устройства\")]")))
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
                     logger.error(f'Ошибка: Не появился qr')
+                    self.driver.save_screenshot(os.path.join(os.getcwd(), 'check.png'))
                 time.sleep(100)
             except Exception as exc:
                 logger.error(f'Ошибка: Нет окна авторизации через вк')
