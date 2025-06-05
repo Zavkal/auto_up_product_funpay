@@ -47,7 +47,7 @@ class SeleniumConfirmation:
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
                     logger.error(f'Ошибка: Не появился qr')
-                time.sleep(1)
+                time.sleep(30)
             except Exception as exc:
                 logger.error(f'Ошибка: Нет окна авторизации через вк')
 
