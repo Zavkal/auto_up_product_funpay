@@ -39,10 +39,9 @@ class SeleniumConfirmation:
                 ).click()
                 try:
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'check.png'))
-                    WebDriverWait(self.driver, 5).until(
+                    WebDriverWait(self.driver, 25).until(
                         ec.presence_of_element_located((By.XPATH,
                                              "//*[contains(text(), \"Отсканируйте QR-код сканером  в приложении ВКонтакте  или камерой устройства\")]")))
-                    time.sleep(3)
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
                     logger.error(f'Ошибка: Не появился qr')
