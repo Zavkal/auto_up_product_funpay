@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class SeleniumConfirmation:
     def __init__(self) -> None:
         self.options = ChromeOptions()
-        self.options.add_argument('--headless')
+        # self.options.add_argument('--headless')
         self.options.add_argument('--no-sandbox')
         self.options.add_argument("--disable-dev-shm-usage")
         self.options.add_argument('--disable-gpu')
@@ -38,13 +38,16 @@ class SeleniumConfirmation:
                     ec.presence_of_element_located((By.CSS_SELECTOR, "a.social-login-item-vk"))
                 ).click()
                 try:
-                    WebDriverWait(self.driver, 25).until(
+                    WebDriverWait(self.driver, 5).until(
                         ec.presence_of_element_located((By.XPATH,
-                                             "//*[contains(text(), \"Отсканируйте QR-код сканером  в приложении ВКонтакте  или камерой устройства\")]")))
+                                             "//*[contains(text(), \"FunPay\")]")))
+                    time.sleep(3)
+                    WebDriverWait(self.driver, 5).until(
+                        ec.presence_of_element_located((By.XPATH,
+                                             "//*[contains(text(), \"FunPay\")]")))
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
                     logger.error(f'Ошибка: Не появился qr')
-                    self.driver.save_screenshot(os.path.join(os.getcwd(), 'check.png'))
                 time.sleep(100)
             except Exception as exc:
                 logger.error(f'Ошибка: Нет окна авторизации через вк')
