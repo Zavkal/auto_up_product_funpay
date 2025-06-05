@@ -24,7 +24,7 @@ class SeleniumConfirmation:
         self.options.add_argument('--disable-gpu')
         self.options.add_argument('--lang=ru')
         self.options.add_argument("--window-size=1366,720")
-        profile_path = "/funpay_profile"
+        profile_path = os.path.join(os.path.expanduser("~"), ".profile1")
         self.options.add_argument(f"--user-data-dir={profile_path}")
         self.driver = webdriver.Chrome(options=self.options)
 
@@ -38,8 +38,9 @@ class SeleniumConfirmation:
                     ec.presence_of_element_located((By.CSS_SELECTOR, "a.social-login-item-vk"))
                 ).click()
                 try:
-                    self.driver.find_element(By.XPATH,
-                                             "//*[contains(text(), \"Отсканируйте QR-код сканером  в приложении ВКонтакте  или камерой устройства\")]")
+                    WebDriverWait(self.driver, 5).until(
+                        ec.presence_of_element_located((By.XPATH,
+                                             "//*[contains(text(), \"Отсканируйте QR-код сканером  в приложении ВКонтакте  или камерой устройства\")]")))
                     time.sleep(3)
                     self.driver.save_screenshot(os.path.join(os.getcwd(), 'qr.png'))
                 except Exception as exc:
